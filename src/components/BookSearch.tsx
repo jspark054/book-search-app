@@ -2,6 +2,7 @@
 
 import { useState, type FormEvent } from "react";
 import BookCard from "./BookCard";
+import BookDetailModal from "./BookDetailModal";
 import { toBook, type Book, type GoogleVolumeItem } from "@/lib/types";
 
 type Status = "idle" | "loading" | "error";
@@ -12,6 +13,8 @@ export default function BookSearch() {
   const [status, setStatus] = useState<Status>("idle");
   const [hasSearched, setHasSearched] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [selectedBook, setSelectedBook] = useState<Book | null>(null);
+  const [selectedIndex, setSelectedIndex] = useState(0);
 
   const handleSearch = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -43,6 +46,12 @@ export default function BookSearch() {
 
   return (
     <div className="flex flex-col gap-10">
+      <BookDetailModal
+        book={selectedBook}
+        index={selectedIndex}
+        onClose={() => setSelectedBook(null)}
+      />
+
       <form
         onSubmit={handleSearch}
         className="mx-auto flex w-full max-w-xl flex-col gap-3 sm:flex-row"
@@ -95,7 +104,15 @@ export default function BookSearch() {
         {status === "idle" && books.length > 0 && (
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {books.map((book, index) => (
-              <BookCard key={book.id} book={book} index={index} />
+              <BookCard
+                key={book.id}
+                book={book}
+                index={index}
+                onClick={() => {
+                  setSelectedBook(book);
+                  setSelectedIndex(index);
+                }}
+              />
             ))}
           </div>
         )}
