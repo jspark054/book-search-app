@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background-color: #fbf6ec;
+  background-image: radial-gradient(circle at 15% 10%, #f7e9e3 0%, transparent 45%),
+    radial-gradient(circle at 85% 0%, #e9efe3 0%, transparent 40%);
+  background-attachment: fixed;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
