@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 
 const GOOGLE_BOOKS_ENDPOINT = "https://www.googleapis.com/books/v1/volumes";
-const MAX_ATTEMPTS = 3;
-const RETRY_DELAY_MS = 400;
+const MAX_ATTEMPTS = 4;
+const RETRY_DELAY_MS = 500;
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 

@@ -16,16 +16,12 @@ export default function BookSearch() {
   const [selectedBook, setSelectedBook] = useState<Book | null>(null);
   const [selectedIndex, setSelectedIndex] = useState(0);
 
-  const handleSearch = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const trimmed = query.trim();
-    if (!trimmed) return;
-
+  const runSearch = async (searchTerm: string) => {
     setStatus("loading");
     setHasSearched(true);
 
     try {
-      const response = await fetch(`/api/books?q=${encodeURIComponent(trimmed)}`);
+      const response = await fetch(`/api/books?q=${encodeURIComponent(searchTerm)}`);
       const data = await response.json();
 
       if (!response.ok) {
@@ -42,6 +38,13 @@ export default function BookSearch() {
       );
       setStatus("error");
     }
+  };
+
+  const handleSearch = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const trimmed = query.trim();
+    if (!trimmed) return;
+    runSearch(trimmed);
   };
 
   return (
@@ -84,9 +87,16 @@ export default function BookSearch() {
         )}
 
         {status === "error" && (
-          <p className="mx-auto max-w-sm text-center text-sm text-red-500">
-            {errorMessage}
-          </p>
+          <div className="mx-auto flex max-w-sm flex-col items-center gap-3 text-center">
+            <p className="text-sm text-red-500">{errorMessage}</p>
+            <button
+              type="button"
+              onClick={() => runSearch(query.trim())}
+              className="rounded-full bg-blush-300 px-5 py-2 text-sm font-medium text-white shadow-card transition-colors hover:bg-blush-400"
+            >
+              다시 시도
+            </button>
+          </div>
         )}
 
         {status === "idle" && hasSearched && books.length === 0 && (
